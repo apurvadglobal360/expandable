@@ -15,8 +15,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.expandable.R
 import com.example.expandable.data_class.ModelClass
+import com.msgp.data.network.model.FilterCarModel
+import com.msgp.data.network.model.GetFilterResponse
+import com.msgp.data.network.model.GetFilterResult
 
-class SubCatAdapter(private var mDataList: List<ModelClass>? = mutableListOf(), var context: Context): RecyclerView.Adapter<SubCatAdapter.ViewHolder>() {
+class SubCatAdapter(private var mDataList: List<FilterCarModel>? = mutableListOf(), var context: Context): RecyclerView.Adapter<SubCatAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubCatAdapter.ViewHolder {
         return SubCatAdapter.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_cab_cat, parent, false))
     }
@@ -26,27 +29,27 @@ class SubCatAdapter(private var mDataList: List<ModelClass>? = mutableListOf(), 
         holder.titleTextView.setText(holderData?.name)
 
 
-        if (holderData?.childCat?.isNullOrEmpty() == false) {
+        if (holderData?.varients?.isNullOrEmpty() == false) {
             holder.rvChildCat.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            val subCatAdapter = ChilCatAdapter(holderData.childCat, context)
+            val subCatAdapter = ChilCatAdapter(holderData.varients, context)
             holder.rvChildCat.adapter = subCatAdapter
-            val isExpanded: Boolean = mDataList?.get(position)!!.expanded
+            val isExpanded: Boolean = mDataList?.get(position)!!.isChecked
             holder.expandableLayout.setVisibility(if (isExpanded) View.VISIBLE else View.GONE)
      //       Glide.with(context).load(R.drawable.minus).into(holder.imgAdd)
         }
 
 
         holder.titleTextView.setOnClickListener {
-            if (holderData?.childCat?.isNullOrEmpty() == false) {
-                val movie: ModelClass = mDataList?.get(holder.adapterPosition)!!
+            if (holderData?.varients?.isNullOrEmpty() == false) {
+                val movie: FilterCarModel = mDataList?.get(holder.adapterPosition)!!
 
-                if (!movie.expanded) {
-                    movie.expanded = true
+                if (!movie.isChecked) {
+                    movie.isChecked = true
 
                     Glide.with(context).load(R.drawable.minus).into(holder.imgAdd)
 
                 } else {
-                    movie.expanded = false
+                    movie.isChecked = false
                     Glide.with(context).load(R.drawable.ic_plus).into(holder.imgAdd)
                 }
                 notifyItemChanged(holder.adapterPosition)

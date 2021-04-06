@@ -4,9 +4,6 @@ class Class() {
     var name: String? = null
     private var isChecked = false
 
-
-
-
     fun getNamee(): String? {
         return name
     }
